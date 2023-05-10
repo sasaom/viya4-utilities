@@ -12,6 +12,4 @@ export CONSUL_HTTP_TOKEN=`kubectl -n $VIYA_NAMESPACE get secret sas-consul-clien
 
 echo "CONSUL_HTTP_TOKEN env variable is set to: $CONSUL_HTTP_TOKEN"
 
-
 [[ ! -z "$CONSUL_HTTP_TOKEN" ]] && echo $CONSUL_HTTP_TOKEN > CONSUL.TOKEN; echo "CONSUL_HTTP_TOKEN was also saved in file: CONSUL.TOKEN"
-
