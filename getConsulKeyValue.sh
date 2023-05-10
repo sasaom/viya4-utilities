@@ -8,7 +8,8 @@ exitWithError() {
 [[ -z $VIYA_NAMESPACE ]] && exitWithError "Environment variable VIYA_NAMESPACE not defined."
 
 CONSULPATH=$1
-[[ -z $CONSULPATH ]] && CONSULPATH='/'
+[[ "$CONSULPATH" == "" ]] && CONSULPATH='/'
+echo "Extracting key-values from path: $CONSULPATH"
 
 kubectl -n $VIYA_NAMESPACE exec -it sas-consul-server-0 -c sas-consul-server -- bash -c "export CONSUL_HTTP_ADDR=https://localhost:8500; /opt/sas/viya/home/bin/sas-bootstrap-config kv read --recurse $1" > CONSUL-KEY-VALUE.txt
 
