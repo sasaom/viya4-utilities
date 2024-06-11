@@ -22,8 +22,8 @@ fi
 
 VIYA4_DEPLOY=${INSTDIR}/deploy
 VIYA4_INFRA=${VIYA4_DEPLOY}/infra
-VIYA4_MONITOR=${INSTDIR}/monitor-logging
-VIYA4_TOOLS=${INSTDIR}/tools
+VIYA4_MONITOR=${INSTDIR}/monitoring-logging
+VIYA4_TOOLS=${INSTDIR}/bin
 PATH=${VIYA4_TOOLS}:$PATH
 VIYA_NAMESPACE=$VIYAENV
 
@@ -37,7 +37,7 @@ tee ${INSTDIR}/VIYA4ENV.sh <<EOF
 export VIYA4_ROOT=${INSTDIR}
 export VIYA4_ARTIFACTS=\${VIYA4_ROOT}/artifacts
 export VIYA4_DEPLOY=\${VIYA4_ROOT}/deploy
-export VIYA4_ARCHIVE=\${VIYA4_DEPLOY}/artifacts
+export VIYA4_ARCHIVE=\${VIYA4_DEPLOY}/00-manifests
 export VIYA4_INFRA=\${VIYA4_DEPLOY}/infra
 export VIYA4_MONITOR=\${VIYA4_ROOT}/monitor-logging
 export VIYA4_RESOURCES=\${VIYA4_ROOT}/resources
