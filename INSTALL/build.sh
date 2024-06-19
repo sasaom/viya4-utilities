@@ -68,7 +68,7 @@ diffSiteYaml() {
   echo "=============================================================================="
   echo "CHECK FILES MODIFIED SINCE THE LAST DEPLOYMENT"
   echo
-  [[ -z $VIYA4_ARCHIVE ]] && exitWithError "Env variable $VIYA4_ARCHIVE is not set."
+  [[ -z $VIYA4_ARCHIVE ]] && exitWithError "Env variable VIYA4_ARCHIVE is not set."
   [[ ! -f $SITEYAML ]] && exitWithError "Cannot find $SITEYAML"
 
   [[ ! -d $VIYA4_ARCHIVE ]] && mkdir -p $VIYA4_ARCHIVE

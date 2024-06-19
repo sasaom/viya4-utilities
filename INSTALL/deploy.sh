@@ -43,15 +43,15 @@ echo "Is installation (--install): $INSTALL"
 echo "Crete separate yaml files  : $SPLIT"
 echo "=============================================================================="
 
-[[ ! -f $SITEYAML ]] && exitWithError "Cannot find $SITEYAML"
-[[ -z $VIYA4_ARCHIVE ]] && exitWithError "Env variable VIYA4_ARCHIVE is not set."
-
 # These are the files created during the build process:
 SITEYAML="site.yaml"
 SITE_CLUSTER_API_YAML="site-cluster-api.yaml"
 SITE_CLUSTER_WIDE_YAML="site-cluster-wide.yaml"
 SITE_CLUSTER_LOCAL_YAML="site-cluster-local.yaml"
 SITE_NAMESPACE_YAML="site-namespace.yaml"
+
+[[ ! -f $SITEYAML ]] && exitWithError "Cannot find $SITEYAML"
+[[ -z $VIYA4_ARCHIVE ]] && exitWithError "Env variable VIYA4_ARCHIVE is not set."
 
 # These are the files deployed last time (stored in a separate folder)
 DEPLOYED_CLUSTER_DIR="$VIYA4_ARCHIVE/cluster"
