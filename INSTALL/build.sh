@@ -32,10 +32,10 @@ splitSiteYaml() {
   echo
   if [[ "$SPLIT"  == "Y" ]]
   then
-    echo "STEP 1: ${SITE_API_YAML} (for an administrator with cluster permissions)"
-    yq e 'select(.metadata.labels."sas.com/admin" == "cluster-api")' $SITEYAML > ${SITE_API_YAML}
-    echo "STEP 2: ${SITE_WIDE_YAML} (for an administrator with cluster permission)"
-    yq e 'select(.metadata.labels."sas.com/admin" == "cluster-wide")' $SITEYAML > ${SITE_WIDE_YAML}
+    echo "STEP 1: ${SITE_CLUSTER_API_YAML} (for an administrator with cluster permissions)"
+    yq e 'select(.metadata.labels."sas.com/admin" == "cluster-api")' $SITEYAML > ${SITE_CLUSTER_API_YAML}
+    echo "STEP 2: ${SITE_CLUSTER_WIDE_YAML} (for an administrator with cluster permission)"
+    yq e 'select(.metadata.labels."sas.com/admin" == "cluster-wide")' $SITEYAML > ${SITE_CLUSTER_WIDE_YAML}
     echo "STEP 3: ${SITE_CLUSTER_LOCAL_YAML} (for an administrator with local cluster permission)"
     yq e 'select(.metadata.labels."sas.com/admin" == "cluster-local")' $SITEYAML > ${SITE_CLUSTER_LOCAL_YAML}
     echo "STEP 4: ${SITE_NAMESPACE_YAML} (for an administrator with namespace permissions)"
@@ -48,58 +48,22 @@ diffFiles() {
   newfile=$1
   oldfile=$2
 
-  #[[ ! -d $VIYA4_ARCHIVE/to-deploy ]] && mkdir $VIYA4_ARCHIVE/to-deploy
-
   newmd5=`md5sum ${newfile} | awk '{print $1}'`
   oldmd5=`md5sum ${oldfile} | awk '{print $1}'`
 
-  if [[ "$newmd5" != "$oldmd5" ]]
-  then
-    echo "[**Updated**] ${newfile}"
-    #cp -f ${newfile} $VIYA4_ARCHIVE/to-deploy/${newfile}
-  else
-    echo "[No changes]  ${newfile}"
-  fi
-}
-
-
-diffSiteYaml() {
-
-  echo "=============================================================================="
-  echo "CHECK FILES MODIFIED SINCE THE LAST DEPLOYMENT"
-  echo
-  [[ -z $VIYA4_ARCHIVE ]] && exitWithError "Env variable VIYA4_ARCHIVE is not set."
-  [[ ! -f $SITEYAML ]] && exitWithError "Cannot find $SITEYAML"
-
-  [[ ! -d $VIYA4_ARCHIVE ]] && mkdir -p $VIYA4_ARCHIVE
-
-  # Comparing with the files saved in $VIYA4_ARCHIVE
-  if [[ "$SPLIT"  == "N" ]]
-  then
-    if [[ ! -f $VIYA4_ARCHIVE/$SITEYAML ]]
+  if [[ ! -f $oldfile ]]
+    then
+      echo "Cannot find a previous version of $oldfile."
+    else
+      if [[ "$newmd5" != "$oldmd5" ]]
       then
-        echo "Cannot find a previous version of $SITEYAML in $VIYA4_ARCHIVE."
-        #cp $SITEYAML $VIYA4_ARCHIVE/$SITEYAML
+        echo "[**Updated**] ${newfile}"
       else
-        # compare previous site.yaml
-        diffFiles $SITEYAML $VIYA4_ARCHIVE/$SITEYAML
-    fi
-  else
-    splitfiles=(${SITE_API_YAML} ${SITE_WIDE_YAML} ${SITE_CLUSTER_LOCAL_YAML} ${SITE_NAMESPACE_YAML})
-
-    for splityaml in ${splitfiles[@]} 
-    do
-      if [[ ! -f $VIYA4_ARCHIVE/$splityaml ]]
-      then
-        echo "Cannot find a previous version of $splityaml in $VIYA4_ARCHIVE."
-        #cp ${splityaml} $VIYA4_ARCHIVE/$splityaml
-      else
-        diffFiles $splityaml $VIYA4_ARCHIVE/$splityaml
+        echo "[No changes]  ${newfile}"
       fi
-    done
   fi
-  echo
 }
+
 
 ##########################################################################################################
 #                                             MAIN
@@ -109,10 +73,23 @@ SPLIT="Y"
 ##########################################################################################################
 
 SITEYAML="site.yaml"
-SITE_API_YAML="site-api.yaml"
-SITE_WIDE_YAML="site-wide.yaml"
+SITE_CLUSTER_API_YAML="site-cluster-api.yaml"
+SITE_CLUSTER_WIDE_YAML="site-cluster-wide.yaml"
 SITE_CLUSTER_LOCAL_YAML="site-cluster-local.yaml"
 SITE_NAMESPACE_YAML="site-namespace.yaml"
+
+# These are the files deployed last time (stored in a separate folder)
+DEPLOYED_CLUSTER_DIR="$VIYA4_ARCHIVE/cluster"
+DEPLOYED_NAMESAPCE_DIR="$VIYA4_ARCHIVE/namespace"
+
+[[ ! -d $DEPLOYED_CLUSTER_DIR ]] && mkdir -p $DEPLOYED_CLUSTER_DIR
+[[ ! -d $DEPLOYED_NAMESAPCE_DIR ]] && mkdir -p $DEPLOYED_NAMESAPCE_DIR
+
+DEPLOYED_SITEYAML="$DEPLOYED_NAMESAPCE_DIR/site.yaml"
+DEPLOYED_SITE_CLUSTER_API_YAML="$DEPLOYED_CLUSTER_DIR/site-cluster-api.yaml"
+DEPLOYED_SITE_CLUSTER_WIDE_YAML="$DEPLOYED_CLUSTER_DIR/site-cluster-wide.yaml"
+DEPLOYED_SITE_CLUSTER_LOCAL_YAML="$DEPLOYED_CLUSTER_DIR/site-cluster-local.yaml"
+DEPLOYED_SITE_NAMESPACE_YAML="$DEPLOYED_NAMESAPCE_DIR/site-namespace.yaml"
 
 case "$1" in
   "--nobuild") BUILD="N";;
@@ -126,7 +103,16 @@ echo "Crete separate yaml files : $SPLIT"
 
 [[ "$BUILD" == "Y" ]] && buildSiteYaml
 splitSiteYaml
-diffSiteYaml
+
+if [[ "$SPLIT"  == "Y" ]]
+then
+  diffFiles ${SITE_CLUSTER_API_YAML} ${DEPLOYED_SITE_CLUSTER_API_YAML}
+  diffFiles ${SITE_CLUSTER_WIDE_YAML} ${DEPLOYED_SITE_CLUSTER_WIDE_YAML}
+  diffFiles ${SITE_CLUSTER_LOCAL_YAML} ${DEPLOYED_SITE_CLUSTER_LOCAL_YAML}
+  diffFiles ${SITE_NAMESPACE_YAML} ${DEPLOYED_SITE_NAMESPACE_YAML}
+else
+  diffFiles ${SITEYAML} ${DEPLOYED_SITEYAML}
+fi
 
 echo "=============================================================================="
 echo
