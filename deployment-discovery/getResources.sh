@@ -6,14 +6,8 @@ then
   exit 1
 fi 
 
-echo "--------------------------------------------"
-echo "VIYA_NAMESPACE:$VIYA_NAMESPACE"
-echo "--------------------------------------------"
-
 podnames=`kubectl get pods --no-headers -o custom-columns=":metadata.name" -n $VIYA_NAMESPACE`
 for apod in $podnames
 do 
-  echo
-  echo $apod
-  kubectl get pod $apod -n $VIYA_NAMESPACE -o json |jq -r '.spec.containers[].resources'
+  kubectl get pod $apod -n $VIYA_NAMESPACE -o json |jq -r '.metadata.labels."app.kubernetes.io/name" as $podname | .status.hostIP as $nodeip | .metadata.labels."workload.sas.com/class" as $class | .spec.containers[] | [$podname, .name,$class,$nodeip,.resources.requests.cpu,.resources.requests.memory,.resources.limits.cpu, .resources.limits.memory] | @csv'
 done

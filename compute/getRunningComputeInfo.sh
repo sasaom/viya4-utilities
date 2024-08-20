@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "pod-name,user,start-time,status,job-id,client"
+kubectl get pods -n $VIYA_NAMESPACE -l "swo.sas.com/containerName=sas-programming-environment" -o json | jq -r '.items[] | select(.kind=="Pod") | [.metadata.name, .metadata.labels."launcher.sas.com/username",.status.startTime, .status.phase, .metadata.labels."swo.sas.com/jobID",  .metadata.labels."launcher.sas.com/requested-by-client"] | @csv'

@@ -43,6 +43,7 @@ export VIYA4_MONITOR=\${VIYA4_ROOT}/monitor-logging
 export VIYA4_RESOURCES=\${VIYA4_ROOT}/resources
 export VIYA4_TOOLS=\${VIYA4_ROOT}/bin
 export VIYA4_UTILITIES=\${VIYA4_ROOT}/utilities
+export VIYA4_ARCHIVE=\${VIYA4_DEPLOY}/archive
 export VIYA_NAMESPACE=$VIYAENV
 export PATH=\${VIYA4_TOOLS}:\$PATH
 export USER_DIR=\${VIYA4_ROOT}/monitoring-logging
