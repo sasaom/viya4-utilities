@@ -1,4 +1,2 @@
-artifacts/*
-bin/*
 deploy/sas-bases/*
 deploy/site.yaml

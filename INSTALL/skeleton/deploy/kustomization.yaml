@@ -1,36 +1,36 @@
-namespace: {{ NAME-OF-NAMESPACE }} 
+namespace: {{ NAME-OF-NAMESPACE }}                                                  #NAMESPACE#
 resources:
 - sas-bases/base
 - sas-bases/overlays/network/networking.k8s.io 
 - site-config/security/openssl-generated-ingress-certificate.yaml 
-- sas-bases/overlays/cas-server
-- sas-bases/overlays/crunchydata/postgres-operator
+- sas-bases/overlays/cas-server                                                     #CAS_SMP#
+- sas-bases/overlays/crunchydata/postgres-operator                                  #VIYADB_INTERNAL#
 - sas-bases/overlays/postgres/platform-postgres
 # If your deployment contains SAS Viya Programming, comment out the next line
-- sas-bases/overlays/internal-elasticsearch
+- sas-bases/overlays/internal-elasticsearch                                         #OPENSEARCH_INTERNAL#
 - sas-bases/overlays/update-checker
-- sas-bases/overlays/cas-server/auto-resources
+- sas-bases/overlays/cas-server/auto-resources                                      #CAS_RESOURCES#
 configurations:
 - sas-bases/overlays/required/kustomizeconfig.yaml
 transformers:
 # If your deployment does not support privileged containers or if your deployment
 # contains SAS Viya Programming, comment out the next line
-- sas-bases/overlays/internal-elasticsearch/sysctl-transformer.yaml
+- sas-bases/overlays/internal-elasticsearch/sysctl-transformer.yaml                 #OPENSEARCH_INTERNAL#
 - sas-bases/overlays/required/transformers.yaml
-- sas-bases/overlays/cas-server/auto-resources/remove-resources.yaml 
+- sas-bases/overlays/cas-server/auto-resources/remove-resources.yaml                #CAS_RESOURCES#
 # If your deployment contains SAS Viya Programming, comment out the next line
-- sas-bases/overlays/internal-elasticsearch/internal-elasticsearch-transformer.yaml
+- sas-bases/overlays/internal-elasticsearch/internal-elasticsearch-transformer.yaml #OPENSEARCH_INTERNAL# 
 # Mount information
 # - site-config/{{ DIRECTORY-PATH }}/cas-add-host-mount.yaml
 components:
-- sas-bases/components/crunchydata/internal-platform-postgres 
-- sas-bases/components/security/core/base/full-stack-tls 
-- sas-bases/components/security/network/networking.k8s.io/ingress/nginx.ingress.kubernetes.io/full-stack-tls 
+- sas-bases/components/crunchydata/internal-platform-postgres                       #VIYADB_INTERNAL#
+- sas-bases/components/security/core/base/full-stack-tls                                                     #TLS_FULLSTACK#
+- sas-bases/components/security/network/networking.k8s.io/ingress/nginx.ingress.kubernetes.io/full-stack-tls #TLS_FULLSTACK#
 patches:
-- path: site-config/storageclass.yaml 
-  target:
-    kind: PersistentVolumeClaim
-    annotationSelector: sas.com/component-name in (sas-backup-job,sas-data-quality-services,sas-commonfiles,sas-cas-operator,sas-pyconfig,sas-risk-cirrus-search,sas-risk-modeling-core))
+- path: site-config/storageclass.yaml                                               #RWXSTORAGE#
+  target:                                                                           #RWXSTORAGE#
+    kind: PersistentVolumeClaim                                                     #RWXSTORAGE#
+    annotationSelector: sas.com/component-name in (sas-backup-job,sas-data-quality-services,sas-commonfiles,sas-cas-operator,sas-pyconfig,sas-risk-cirrus-search,sas-risk-modeling-core)) #RWXSTORAGE#
 # License information
 # secretGenerator:
 # - name: sas-license
@@ -39,12 +39,12 @@ patches:
 #   files:
 #   - SAS_LICENSE=license.jwt
 configMapGenerator:
-- name: ingress-input
-  behavior: merge
-  literals:
-  - INGRESS_HOST={{ NAME-OF-INGRESS-HOST }}
-- name: sas-shared-config
-  behavior: merge
-  literals:
-  - SAS_SERVICES_URL=https://{{ NAME-OF-INGRESS-HOST }}:{{ PORT }} 
+- name: ingress-input                                              #CLUSTERINGRESS#
+  behavior: merge                                                  #CLUSTERINGRESS#
+  literals:                                                        #CLUSTERINGRESS#
+  - INGRESS_HOST={{ NAME-OF-INGRESS-HOST }}                        #CLUSTERINGRESS# 
+- name: sas-shared-config                                          #CLUSTERINGRESS#
+  behavior: merge                                                  #CLUSTERINGRESS#
+  literals:                                                        #CLUSTERINGRESS#  
+  - SAS_SERVICES_URL=https://{{ NAME-OF-INGRESS-HOST }}:{{ PORT }} #CLUSTERINGRESS#
   # - SAS_URL_EXTERNAL_VIYA={{ EXTERNAL-PROXY-URL }}
