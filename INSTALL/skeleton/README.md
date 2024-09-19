@@ -75,22 +75,22 @@ Reference: [SAS Viya Platform Administrator - Required Customizations](https://g
 
 - `#VIYADB_INTERNAL#` 
 
-  Viya4 uses an internal instace of PostgreSQL.
+  (Default) Viya4 uses an internal instace of PostgreSQL.
 
 - `#OPENSEARCH_INTERNAL#` 
 
   **Viya4 uses an internal instace of OpenSearch.**
 
-  - Use of an init-container to configure the Default Virtual Memory Resources.
+  - (Default) Use of an init-container to configure the Default Virtual Memory Resources.
     - The SAS Viya platform includes an optional transformer as part of the internal-elasticsearch overlay that adds an init container to automatically set this parameter. **This init container must be run at a privileged level since it modifies the kernel parameters of the host.** The container terminates after it sets the kernel parameter. The OpenSearch software then starts as a non-privileged container. Therefore, privileged containers must be permitted by your Pod Security Standards to use this option.
 
-  - No High Availability is configured for the internal OpenSearch.
+  - (Default) No High Availability is configured for the internal OpenSearch.
 
-  - The OpenSearch JVM process runs under the fixed UID of 1000.
+  - (Default) The OpenSearch JVM process runs under the fixed UID of 1000.
 
-  - The OpenSearch is **NOT** running in a **FIPS-enabled environment**. 
+  - (Default) The OpenSearch is **NOT** running in a **FIPS-enabled environment**. 
 
-  - OpenSearch deletes security audit log indices after seven days (default value).
+  - (Default) OpenSearch deletes security audit log indices after seven days.
 
 - `#OPENSSL#` 
 
@@ -128,9 +128,13 @@ Reference: [SAS Viya Platform Administrator - Required Customizations](https://g
 
 - `#CAS_SMP#`
 
-  Single Node CAS (SMP)
+  (Default) Single Node CAS deployment.
 
 - `#CAS_RESOURCES#`
 
-  Autoresourcing is enabled.
+  (Default) Autoresourcing is enabled.
   > Note: For auto-resourcing to work appropriately, the CAS node pool must have the appropriate taints.
+
+- `#UPDATE-CHECKER#`
+
+  The Update Checker is disabled. 

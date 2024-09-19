@@ -2,13 +2,13 @@ namespace: {{ NAME-OF-NAMESPACE }}                                              
 resources:
 - sas-bases/base
 - sas-bases/overlays/network/networking.k8s.io 
-- site-config/security/openssl-generated-ingress-certificate.yaml 
+#- site-config/security/openssl-generated-ingress-certificate.yaml                  #TLS-INGRESS#
 - sas-bases/overlays/cas-server                                                     #CAS_SMP#
 - sas-bases/overlays/crunchydata/postgres-operator                                  #VIYADB_INTERNAL#
 - sas-bases/overlays/postgres/platform-postgres
 # If your deployment contains SAS Viya Programming, comment out the next line
 - sas-bases/overlays/internal-elasticsearch                                         #OPENSEARCH_INTERNAL#
-- sas-bases/overlays/update-checker
+#- sas-bases/overlays/update-checker                                                #UPDATE-CHECKER#
 - sas-bases/overlays/cas-server/auto-resources                                      #CAS_RESOURCES#
 configurations:
 - sas-bases/overlays/required/kustomizeconfig.yaml
