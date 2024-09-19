@@ -30,3 +30,35 @@ E.g.:
   "ACRPASSWORD":"..."
 }
 ```
+
+
+## `downloadMirrorManager.sh`
+
+
+Usage:
+
+```bash
+# No input parameters.
+./downloadMirrorManager.sh
+```
+
+> The $VIYA4_ARTIFACTS env variable must must be set
+
+The scripts downloads and unzip the `mirrormgr` package into the $VIYA4_ARTIFACTS folder.
+
+
+## `downloadViyaOrderCLI.sh`
+
+Usage:
+
+```bash
+# No input parameters.
+./downloadViyaOrderCLI.sh
+```
+
+> The $VIYA4_ARTIFACTS env variable must must be set
+
+The scripts downloads and unzip the `viya4-orders-cli` package into the $VIYA4_ARTIFACTS folder.
+
+
+

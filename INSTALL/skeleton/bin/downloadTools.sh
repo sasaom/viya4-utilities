@@ -7,6 +7,7 @@ JQ_VER="1.7.1"
 KUSTOMIZE_VER="v5.3.0"
 KUBECTL_VER="v1.29.7"
 YQ_VER="v4.42.1"
+HELM_VER="v3.12.0"
 ###############################################################################
 
 myfolder="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -87,4 +88,22 @@ then
 fi
 yqver=`$YQ_CMD --version`
 echo "  yq installed version  : $yqver"
+echo
+
+#------------------------------------------------------------------------------
+# helm
+#------------------------------------------------------------------------------
+#HELM_CMD="helm.exe"
+HELM_CMD="helm"
+
+if [[ ! -f "${VIYA4_TOOLS}/$HELM_CMD" ]]
+then
+  echo "  Downloading yq $HELM_VER"
+  wget wget https://get.helm.sh/helm-${HELM_VER}-linux-amd64.tar.gz
+  tar -xvf helm-${HELM_VER}-linux-amd64.tar.gz -C ${VIYA4_TOOLS}
+  mv linux-amd64/helm ${VIYA4_TOOLS}/$HELM_CMD
+  rm -rf linux-amd64
+fi
+helmver=`$HELM_CMD version --short`
+echo "  helm installed version  : $helmver"
 echo
