@@ -4,8 +4,8 @@
 # Global vars
 ###############################################################################
 JQ_VER="1.7.1"
-KUSTOMIZE_VER="v5.0.3"
-KUBECTL_VER="v1.27.9"
+KUSTOMIZE_VER="v5.3.0"
+KUBECTL_VER="v1.29.7"
 YQ_VER="v4.42.1"
 ###############################################################################
 
@@ -16,7 +16,7 @@ exitWithError() {
   exit 1
 }
 
-[[ -z $VIYA4_TOOLS ]] && exitWithError "VIYA4_TOOL env variable not set. Source the Viya4 settings."
+[[ -z $VIYA4_TOOLS ]] && VIYA4_TOOLS=$myfolder
 
 #------------------------------------------------------------------------------
 # jq
@@ -74,7 +74,7 @@ echo "  kubectl installed version: $kubectlver"
 # yq
 #------------------------------------------------------------------------------
 #JQ_CMD="yq.exe"
-YQ_CMD="yq"
+YQ_CMD="cd ...yq"
 
 if [[ ! -f "${VIYA4_TOOLS}/$YQ_CMD" ]]
 then
