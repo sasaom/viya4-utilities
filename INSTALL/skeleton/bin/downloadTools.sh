@@ -52,6 +52,7 @@ fi
 
 kustomizever=`$KUSTOMIZE_CMD version`
 echo "  kustomize  installed version: $kustomizever"
+echo
 
 #------------------------------------------------------------------------------
 # kubectl
@@ -67,14 +68,15 @@ then
   rm -rf kubernetes
 fi
 
-kubectlver=`$KUBECTL_CMD version --client --output=json | jq.exe -r '.clientVersion.gitVersion'`
+kubectlver=`$KUBECTL_CMD version --client --output=json | $JQ_CMD -r '.clientVersion.gitVersion'`
 echo "  kubectl installed version: $kubectlver"
+echo
 
 #------------------------------------------------------------------------------
 # yq
 #------------------------------------------------------------------------------
 #JQ_CMD="yq.exe"
-YQ_CMD="cd ...yq"
+YQ_CMD="yq"
 
 if [[ ! -f "${VIYA4_TOOLS}/$YQ_CMD" ]]
 then

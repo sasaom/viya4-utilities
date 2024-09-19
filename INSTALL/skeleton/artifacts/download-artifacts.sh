@@ -118,19 +118,6 @@ echo "> CADENCE        = $CADENCE"
 echo
 
 #-----------------------------------------------------------------------------------"
-# Get SAS mirrormgr (used to download SAS Viya containers and upload them to the ACR)
-#-----------------------------------------------------------------------------------"
-if [[ ! -f "$myfolder/$MIRRORMGR_CMD" ]] 
-then
-  echo "# MIRRORMG --> $MIRRORMGR_CMD not available. Downloading it ..." 
-  getMirrormgr
-  echo
-else
-  echo "# MIRRORMG --> $MIRRORMGR_CMD is available." 
-  echo
-fi
-
-#-----------------------------------------------------------------------------------"
 # Get SAS Viya CLI (used to download objects from my.sas.com)
 #-----------------------------------------------------------------------------------"
 if [[ ! -f "$myfolder/$VIYA4_ORDER_CLI_CMD" ]] 
@@ -147,15 +134,32 @@ fi
 # Download artifacts (SAS license + SAS deployment manifests)
 #-----------------------------------------------------------------------------------"
 echo "# VIYA ARTIFACTS" 
+
 getViyaArtifacts
+
 echo
+
+#-----------------------------------------------------------------------------------"
+# Get SAS mirrormgr (used to download SAS Viya containers and upload them to the ACR)
+#-----------------------------------------------------------------------------------"
+
+#if [[ ! -f "$myfolder/$MIRRORMGR_CMD" ]] 
+#then
+#  echo "# MIRRORMG --> $MIRRORMGR_CMD not available. Downloading it ..." 
+#  getMirrormgr
+#  echo
+#else
+#  echo "# MIRRORMG --> $MIRRORMGR_CMD is available." 
+#  echo
+#fi
 
 #-----------------------------------------------------------------------------------"
 # Pull containers from SAS and push into the internal container registry (ACR)
 #-----------------------------------------------------------------------------------"
-echo "# VIYA4 CONTAINERS" 
-pushToInternalRegistry
-echo
-echo "------------------------------------------------------------------------"#
+
+#echo "# VIYA4 CONTAINERS" 
+#pushToInternalRegistry
+#echo
+#echo "------------------------------------------------------------------------"#
 
 
