@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #export VIYA4_ROOT=~ 
-if [[ -z $VIYA4_ROOT ]]
+if [[ -z "${VIYA4_ROOT}" ]]
 then
   echo "************************************************************************"
   echo "Env variable VIYA4_ROOT not set."
