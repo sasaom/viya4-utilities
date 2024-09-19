@@ -34,7 +34,7 @@
 
 ## History
 
-### [tag: `Inst-Stable-2024.08`] 2024 Oct 31 - Installation Stable-2024.08
+### [tag: `Inst-Stable-2024.08`] 2024 Oct 30 - Installation Stable-2024.08
 
 - Author: **your email**
 
