@@ -1,3 +1,5 @@
 62.198.6.116/32    # SAS DK Aarhus offices
+81.27.215.186/32   # SAS DK Aarhus offices
 80.80.4.0/27       # SAS DK Copenhagen offices
 149.173.0.0/16     # SAS USA Cary offices
+20.123.93.237/32   # nordiclabs2, aom.sasnordics.com
