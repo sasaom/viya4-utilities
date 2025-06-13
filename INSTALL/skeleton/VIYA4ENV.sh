@@ -21,7 +21,7 @@ else
   export USER_DIR=${VIYA4_ROOT}/monitoring-logging
   
   echo "------------------------------------------------------------------------"
-  echo "Viya4 env variables and tools (from $VIY4_ROOT/VIYA4ENV.sh)"
+  echo "Viya4 env variables and tools (from $VIYA4_ROOT/VIYA4ENV.sh)"
   echo
   echo "VIYA4_ROOT              : $VIYA4_ROOT"
   echo "VIYA_NAMESPACE (VIYAENV): $VIYA_NAMESPACE"
