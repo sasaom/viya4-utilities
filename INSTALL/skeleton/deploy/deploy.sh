@@ -51,11 +51,11 @@ SITE_CLUSTER_LOCAL_YAML="site-cluster-local.yaml"
 SITE_NAMESPACE_YAML="site-namespace.yaml"
 
 [[ ! -f $SITEYAML ]] && exitWithError "Cannot find $SITEYAML"
-[[ -z $VIYA4_ARCHIVE ]] && exitWithError "Env variable VIYA4_ARCHIVE is not set."
+[[ -z $VIYA4_LIVE ]] && exitWithError "Env variable VIYA4_LIVE is not set."
 
 # These are the files deployed last time (stored in a separate folder)
-DEPLOYED_CLUSTER_DIR="$VIYA4_ARCHIVE/cluster"
-DEPLOYED_NAMESAPCE_DIR="$VIYA4_ARCHIVE/namespace"
+DEPLOYED_CLUSTER_DIR="$VIYA4_LIVE/cluster"
+DEPLOYED_NAMESAPCE_DIR="$VIYA4_LIVE/namespace"
 DEPLOYED_SITEYAML="$DEPLOYED_NAMESAPCE_DIR/site.yaml"
 DEPLOYED_SITE_CLUSTER_API_YAML="$DEPLOYED_CLUSTER_DIR/site-cluster-api.yaml"
 DEPLOYED_SITE_CLUSTER_WIDE_YAML="$DEPLOYED_CLUSTER_DIR/site-cluster-wide.yaml"

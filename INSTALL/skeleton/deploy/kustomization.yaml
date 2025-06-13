@@ -3,34 +3,37 @@ resources:
 - sas-bases/base
 - sas-bases/overlays/network/networking.k8s.io 
 #- site-config/security/openssl-generated-ingress-certificate.yaml                  #TLS-INGRESS#
-- sas-bases/overlays/cas-server                                                     #CAS_SMP#
-- sas-bases/overlays/crunchydata/postgres-operator                                  #VIYADB_INTERNAL#
+- sas-bases/overlays/cas-server                                                     #CAS-SMP#
+- sas-bases/overlays/crunchydata/postgres-operator                                  #VIYADB-INTERNAL#
 - sas-bases/overlays/postgres/platform-postgres
 # If your deployment contains SAS Viya Programming, comment out the next line
-- sas-bases/overlays/internal-elasticsearch                                         #OPENSEARCH_INTERNAL#
+- sas-bases/overlays/internal-elasticsearch                                         #OPENSEARCH-INTERNAL#
 #- sas-bases/overlays/update-checker                                                #UPDATE-CHECKER#
-- sas-bases/overlays/cas-server/auto-resources                                      #CAS_RESOURCES#
+- sas-bases/overlays/cas-server/auto-resources                                      #CAS-RESOURCES#
 configurations:
 - sas-bases/overlays/required/kustomizeconfig.yaml
 transformers:
 # If your deployment does not support privileged containers or if your deployment
 # contains SAS Viya Programming, comment out the next line
-- sas-bases/overlays/internal-elasticsearch/sysctl-transformer.yaml                 #OPENSEARCH_INTERNAL#
+- sas-bases/overlays/internal-elasticsearch/sysctl-transformer.yaml                 #OPENSEARCH-INTERNAL#
 - sas-bases/overlays/required/transformers.yaml
-- sas-bases/overlays/cas-server/auto-resources/remove-resources.yaml                #CAS_RESOURCES#
+- site-config/mirror.yaml                                                           #MIRROR#
+- sas-bases/overlays/cas-server/auto-resources/remove-resources.yaml                #CAS-RESOURCES#  (Enable autoresourcing)
 # If your deployment contains SAS Viya Programming, comment out the next line
-- sas-bases/overlays/internal-elasticsearch/internal-elasticsearch-transformer.yaml #OPENSEARCH_INTERNAL# 
+- sas-bases/overlays/internal-elasticsearch/internal-elasticsearch-transformer.yaml #OPENSEARCH-INTERNAL# 
 # Mount information
 # - site-config/{{ DIRECTORY-PATH }}/cas-add-host-mount.yaml
 components:
-- sas-bases/components/crunchydata/internal-platform-postgres                       #VIYADB_INTERNAL#
-- sas-bases/components/security/core/base/full-stack-tls                                                     #TLS_FULLSTACK#
-- sas-bases/components/security/network/networking.k8s.io/ingress/nginx.ingress.kubernetes.io/full-stack-tls #TLS_FULLSTACK#
+- sas-bases/components/crunchydata/internal-platform-postgres                       #VIYADB-INTERNAL#
+- sas-bases/components/security/core/base/full-stack-tls                                                     #TLS-FULLSTACK#
+- sas-bases/components/security/network/networking.k8s.io/ingress/nginx.ingress.kubernetes.io/full-stack-tls #TLS-FULLSTACK#
+generators:
+- site-config/security/customer-provided-ingress-certificate.yaml                   #TLS-INGRESS#
 patches:
-- path: site-config/storageclass.yaml                                               #RWXSTORAGE#
-  target:                                                                           #RWXSTORAGE#
-    kind: PersistentVolumeClaim                                                     #RWXSTORAGE#
-    annotationSelector: sas.com/component-name in (sas-backup-job,sas-data-quality-services,sas-commonfiles,sas-cas-operator,sas-pyconfig,sas-risk-cirrus-search,sas-risk-modeling-core)) #RWXSTORAGE#
+- path: site-config/storageclass.yaml                                               #RWX-STORAGE#
+  target:                                                                           #RWX-STORAGE#
+    kind: PersistentVolumeClaim                                                     #RWX-STORAGE#
+    annotationSelector: sas.com/component-name in (sas-backup-job,sas-data-quality-services,sas-commonfiles,sas-cas-operator,sas-pyconfig,sas-risk-cirrus-search,sas-risk-modeling-core) #RWX-STORAGE#
 # License information
 # secretGenerator:
 # - name: sas-license
@@ -39,12 +42,16 @@ patches:
 #   files:
 #   - SAS_LICENSE=license.jwt
 configMapGenerator:
-- name: ingress-input                                              #CLUSTERINGRESS#
-  behavior: merge                                                  #CLUSTERINGRESS#
-  literals:                                                        #CLUSTERINGRESS#
-  - INGRESS_HOST={{ NAME-OF-INGRESS-HOST }}                        #CLUSTERINGRESS# 
-- name: sas-shared-config                                          #CLUSTERINGRESS#
-  behavior: merge                                                  #CLUSTERINGRESS#
-  literals:                                                        #CLUSTERINGRESS#  
-  - SAS_SERVICES_URL=https://{{ NAME-OF-INGRESS-HOST }}:{{ PORT }} #CLUSTERINGRESS#
-  # - SAS_URL_EXTERNAL_VIYA={{ EXTERNAL-PROXY-URL }}
+- name: ingress-input                                              #INGRESS#
+  behavior: merge                                                  #INGRESS#
+  literals:                                                        #INGRESS#
+  - INGRESS_HOST={{ NAME-OF-INGRESS-HOST }}                        #INGRESS#
+- name: sas-shared-config                                          #INGRESS#
+  behavior: merge                                                  #INGRESS#
+  literals:                                                        #INGRESS# 
+  - SAS_SERVICES_URL=https://{{ NAME-OF-INGRESS-HOST }}:{{ PORT }} #INGRESS#
+  # - SAS_URL_EXTERNAL_VIYA={{ EXTERNAL-PROXY-URL }}               #INGRESS#
+- name: input                                                      #MIRROR#
+  behavior: merge                                                  #MIRROR#
+  literals:                                                        #MIRROR#
+  - IMAGE_REGISTRY={{ MIRROR_URL }}                                #MIRROR#
